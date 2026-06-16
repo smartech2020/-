@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <div class="card p-4 md:p-5 mb-5 border-top border-5 border-emerald-600">
+            <h2 class="text-center mb-4 text-emerald-800 fw-bold">فرم هوشمند تحلیل وضعیت دانش‌آموز</h2>
+            <p class="text-muted text-center mb-5">جهت ارزیابی و پیش‌بینی ریسک افت تحصیلی بر اساس الگوریتم‌های هوش مصنوعی، لطفاً اطلاعات تحصیلی، رفتاری و محیطی دانش‌آموز را با دقت وارد نمایید.</p>
+            
+            <form action="/predict" method="POST" class="needs-validation" novalidate>
+                
+                <!-- Section 1: مشخصات عمومی -->
+                <h5 class="text-emerald-700 border-bottom pb-2 mb-3 fw-bold">۱. مشخصات عمومی و پایه تحصیلی</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label for="name" class="form-label font-bold">نام و نام خانوادگی دانش‌آموز (اختیاری):</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="مثال: علی رضایی" value="علی رضایی">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="age" class="form-label">سن (سال):</label>
+                        <select class="form-select" id="age" name="age" required>
+                            <option value="15">۱۵ سال</option>
+                            <option value="16" selected>۱۶ سال</option>
+                            <option value="17">۱۷ سال</option>
+                            <option value="18">۱۸ سال</option>
+                            <option value="19">۱۹ سال</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">جنسیت:</label>
+                        <div class="d-flex gap-3 pt-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gender" id="gender_boy" value="پسر" checked>
+                                <label class="form-check-label" for="gender_boy">پسر</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gender" id="gender_girl" value="دختر">
+                                <label class="form-check-label" for="gender_girl">دختر</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <label for="grade" class="form-label">پایه تحصیلی:</label>
+                        <select class="form-select" id="grade" name="grade" required>
+                            <option value="10" selected>دهم متوسطه دوم</option>
+                            <option value="11">یازدهم متوسطه دوم</option>
+                            <option value="12">دوازدهم (کنکور)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Section 2: عملکرد درسی -->
+                <h5 class="text-emerald-700 border-bottom pb-2 mb-3 fw-bold">۲. شاخص‌های درسی و تحصیلی</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label for="gpa" class="form-label">میانگین معدل نیم‌سال قبل (از ۲۰):</label>
+                        <input type="number" step="0.01" min="0" max="20" class="form-control" id="gpa" name="gpa" placeholder="مثال: ۱۵.۷۵" value="15.5" required>
+                        <div class="invalid-feedback">لطفاً معدل معتبری بین ۰ تا ۲۰ وارد کنید.</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="absences" class="form-label">تعداد کل غیبت‌ها در ترم:</label>
+                        <input type="number" min="0" max="100" class="form-control" id="absences" name="absences" placeholder="مثال: ۳" value="2" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="homework" class="form-label">وضعیت انجام تکالیف کلاسی:</label>
+                        <select class="form-select" id="homework" name="homework" required>
+                            <option value="کامل" selected>کامل و به موقع انجام می‌دهد</option>
+                            <option value="ناقص">گاهی اوقات یا به صورت ناقص</option>
+                            <option value="عدم انجام">به ندرت یا اصلاً انجام نمی‌دهد</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Section 3: مدیریت زمان و سبک زندگی -->
+                <h5 class="text-emerald-700 border-bottom pb-2 mb-3 fw-bold">۳. مدیریت زمان و سبک زندگی</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <label for="study_hours" class="form-label">ساعت مطالعه روزانه (غیر کلاسی):</label>
+                        <input type="number" step="0.5" min="0" max="24" class="form-control" id="study_hours" name="study_hours" placeholder="ساعت" value="2.5" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="sleep_hours" class="form-label">میانگین ساعات خواب شبانه‌روزی:</label>
+                        <input type="number" step="0.5" min="0" max="24" class="form-control" id="sleep_hours" name="sleep_hours" placeholder="ساعت" value="7.5" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="mobile_hours" class="form-label">مدت زمان روزانه در فضای مجازی:</label>
+                        <input type="number" step="0.5" min="0" max="24" class="form-control" id="mobile_hours" name="mobile_hours" placeholder="ساعت" value="3.0" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="internet_hours" class="form-label">استفاده متفرقه از اینترنت و سرگرمی:</label>
+                        <input type="number" step="0.5" min="0" max="24" class="form-control" id="internet_hours" name="internet_hours" placeholder="ساعت" value="2.0" required>
+                    </div>
+                </div>
+
+                <!-- Section 4: عوامل روانشناختی و محیطی -->
+                <h5 class="text-emerald-700 border-bottom pb-2 mb-3 fw-bold">۴. ابعاد روان‌شناختی و حمایت خانوادگی</h5>
+                <div class="row g-3 mb-5">
+                    <div class="col-md-4">
+                        <label for="parental_support" class="form-label">میزان حمایت و پیگیری تحصیلی والدین:</label>
+                        <select class="form-select" id="parental_support" name="parental_support" required>
+                            <option value="بالا" selected>پیگیری بالا و مستمر عاطفی/درسی</option>
+                            <option value="متوسط">پیگیری معمولی و مقطعی</option>
+                            <option value="کم">پیگیری ضعیف بار علمی و رفتاری</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="motivation" class="form-label">میزان انگیزه و هدف تحصیلی دانش‌آموز:</label>
+                        <select class="form-select" id="motivation" name="motivation" required>
+                            <option value="زیاد" selected>علاقه‌مندی بالا و تلاش جدی برای آینده</option>
+                            <option value="متوسط">انگیزه معمولی و گذرا</option>
+                            <option value="کم">بی‌تفاوتی تحصیلی و انگیزه بسیار کم</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="participation" class="form-label">مشارکت در فعالیت‌ها و تعامل در کلاس:</label>
+                        <select class="form-select" id="participation" name="participation" required>
+                            <option value="فعال" selected>بسیار پویا و فعال در پرسش و پاسخ</option>
+                            <option value="معمولی">مشارکت معمولی و متوسط</option>
+                            <option value="منفعل">منفعل، بی‌علاقه و ممانعت از همفکری</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center py-3 fs-5 fw-bold rounded-3 transition shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="me-2" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                        تحلیل وضعیت رفتاری و پیش‌بینی افت تحصیلی دانش‌آموز
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Bootstrap Client-side Validation helper
+    (() => {
+      'use strict'
+      const forms = document.querySelectorAll('.needs-validation')
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
+</script>
+{% endblock %}

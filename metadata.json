@@ -1,0 +1,6 @@
+{
+  "name": "سامانه هوشمند پیش‌بینی افت تحصیلی",
+  "description": "سامانه هوشمند ایرانی جهت برآورد آماری، پیش‌بینی افت تحصیلی دانش‌آموزان و ارائه راهکارهای اصلاحی متکی بر یادگیری ماشین",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

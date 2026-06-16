@@ -1,0 +1,43 @@
+/* Custom Style Overrides for Student Academic Decline Prediction */
+
+body {
+    background-color: #f8fafc;
+    color: #1e293b;
+    font-family: 'Vazirmatn', sans-serif;
+    letter-spacing: -0.01em;
+}
+
+.card {
+    border-radius: 1rem !important;
+    background: #ffffff;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.transition-all {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chart-container {
+    min-height: 400px;
+    position: relative;
+}
+
+/* Custom RTL grid helpers */
+.direction-rtl {
+    direction: rtl;
+}
+
+.list-group-item {
+    border: none !important;
+}
+
+.progress {
+    border-radius: 9999px;
+    background-color: #f1f5f9;
+}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="mb-4">
+        <h2 class="fw-bold text-emerald-800">سیستم علمی تحلیل الگوها و ارزیابی یادگیری ماشین</h2>
+        <p class="text-muted">گزارش فرآیند آموزش مدل، شاخص‌های ارزیابی ریاضی و مقایسه فنی الگوریتم‌های هوش مصنوعی فعال در سامانه.</p>
+    </div>
+
+    <!-- Algorithm details -->
+    <div class="card p-4 mb-4 border-start border-5 border-emerald-600 bg-white shadow-sm">
+        <h4 class="fw-bold text-emerald-800 mb-2">مدل بهینه فعال در سیستم: <span class="text-success">{{ best_name }}</span></h4>
+        <p class="text-muted leading-relaxed mb-0">
+            برای تشخیص دقیق افت تحصیلی، سامانه اقدام به مقایسه سه‌جانبه الگوریتم‌های <strong>رگرسیون لجستیک (Logistic Regression)</strong>، 
+            <strong>جنگل تصادفی (Random Forest)</strong> و <strong>تقویت گرادیان (Gradient Boosting)</strong> با ۵۰۰۰ داده آموزشی شبیه‌سازی‌شده معتبر نموده است.
+            بر اساس تحلیل خودکار خطای مدل و رتبه‌بندی ماتریس درهم‌ریختگی، بهترین مدل جهت تولید گزارش انتخاب گشته است.
+        </p>
+    </div>
+
+    <!-- Charts -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="card p-3 h-100 shadow-sm">
+                {{ chart_importance|safe }}
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card p-3 h-100 shadow-sm">
+                {{ chart_comparison|safe }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Precision table details -->
+    <div class="card p-4 mb-5">
+        <h5 class="fw-bold text-emerald-800 mb-3">جدول پایش شاخص‌های یادگیری ماشین (مجموعه داده آزمون)</h5>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">الگوریتم هوش مصنوعی</th>
+                        <th scope="col">دقت کلی (Accuracy)</th>
+                        <th scope="col">بازخوانی (Recall)</th>
+                        <th scope="col">دقت تفکیک (Precision)</th>
+                        <th scope="col">شاخص موازنه اف۱ (F1-score)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for name, metrics in results.items() %}
+                    <tr>
+                        <td class="fw-bold text-start">{{ name }}</td>
+                        <td class="text-success fw-bold">{{ (metrics.accuracy * 100)|round(1) }} %</td>
+                        <td>{{ (metrics.recall * 100)|round(1) }} %</td>
+                        <td>{{ (metrics.precision * 100)|round(1) }} %</td>
+                        <td class="fw-bold">{{ (metrics.f1_score * 100)|round(1) }} %</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

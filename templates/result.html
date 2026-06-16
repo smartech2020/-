@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row g-4">
+    
+    <!-- Left Column: Risk Level & Probability Gauge Card -->
+    <div class="col-lg-5">
+        <div class="card p-4 text-center h-100 d-flex flex-column justify-content-between">
+            <div>
+                <h4 class="fw-bold mb-3 text-emerald-800">نتیجه سنجش هوش مصنوعی</h4>
+                <p class="text-muted small">این گزارش بر اساس تحلیل آماری سبک کار و برآورد الگوهای تحصیلی صادر شده است.</p>
+                <hr>
+                
+                <!-- Risk Level Visual indicator -->
+                <div class="my-4">
+                    <span class="text-muted d-block mb-1">سطح ریسک افت تحصیلی:</span>
+                    {% if risk_level == 'زیاد' %}
+                        <div class="badge bg-danger fs-3 py-2 px-4 rounded-pill shadow-sm">ریسک زرد و قرمز (زیاد)</div>
+                    {% elif risk_level == 'متوسط' %}
+                        <div class="badge bg-warning text-dark fs-3 py-2 px-4 rounded-pill shadow-sm">ریسک متوسط</div>
+                    {% else %}
+                        <div class="badge bg-success fs-3 py-2 px-4 rounded-pill shadow-sm">ریسک بسیار پایین (کم)</div>
+                    {% endif %}
+                </div>
+
+                <!-- Probability gauge visualization -->
+                <div class="my-4 p-4 border rounded bg-light">
+                    <h1 class="display-3 fw-bold mb-0 
+                        {% if risk_prob >= 60 %}text-danger
+                        {% elif risk_prob >= 30 %}text-warning
+                        {% else %}text-success{% endif %}">
+                        {{ risk_prob }}%
+                    </h1>
+                    <span class="d-block text-muted font-semibold mt-1">احتمال دقیق افت تحصیلی کارنامه</span>
+                    <div class="progress mt-3" style="height: 12px;">
+                        <input type="hidden" id="risk_prob_val" value="{{ risk_prob }}">
+                        <div class="progress-bar {% if risk_prob >= 60 %}bg-danger{% elif risk_prob >= 30 %}bg-warning{% else %}bg-success{% endif %}" 
+                             role="progressbar" style="width: {{ risk_prob }}%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meta validation -->
+            <div class="border-top pt-3 text-start bg-light p-3 rounded">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="text-muted small">ضریب اطمینان مدل:</span>
+                    <span class="fw-bold text-success">{{ conf_score }}%</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted small">نام دانش‌آموز:</span>
+                    <span class="fw-bold">{{ data.name }}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-1">
+                    <span class="text-muted small">پایه تحصیلی:</span>
+                    <span class="fw-bold">{{ data.grade }} دهم</span>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <a href="/" class="btn btn-outline-secondary w-full py-2">تحلیل مجدد / ثبت دانش‌آموز جدید</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: XAI & Recommender -->
+    <div class="col-lg-7">
+        <div class="d-flex flex-column gap-4 h-100">
+            
+            <!-- Card 1: Explainable AI Model Explanations (شفافیت هوش مصنوعی) -->
+            <div class="card p-4">
+                <h5 class="fw-bold text-emerald-800 d-flex align-items-center mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" class="me-2 text-emerald-600" viewBox="0 0 24 24"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17Z"/><path d="m10 15 5-3-5-3v6Z"/></svg>
+                    توضیحات مدل یادگیری ماشین (Explainable AI)
+                </h5>
+                <p class="text-muted small">کدام رفتارهای دانش‌آموز بیشترین نقش منفی را بر ریسک افت تحصیلی وی ایجاد کرده‌ است؟</p>
+                <div class="list-group list-group-flush mt-2">
+                    {% for item in factors %}
+                    <div class="list-group-item px-0 py-3">
+                        <div class="d-flex w-100 justify-content-between align-items-center mb-1">
+                            <h6 class="mb-0 fw-bold text-slate-800">
+                                {% if item.severity == 'High' %}
+                                    <span class="text-danger">●</span>
+                                {% elif item.severity == 'Medium' %}
+                                    <span class="text-warning">●</span>
+                                {% else %}
+                                    <span class="text-success">●</span>
+                                {% endif %}
+                                {{ item.factor }}
+                            </h6>
+                            <span class="badge {% if item.severity == 'High' %}bg-danger-subtle text-danger{% else %}bg-warning-subtle text-warning-emphasis{% endif %} px-2 py-1 select-none font-bold">
+                                {{ item.severity }}
+                            </span>
+                        </div>
+                        <p class="text-muted mb-0 small">تأثیر مستقیم بر راندمان: {{ item.impact }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Card 2: Strategic Recommender Board (سیستم توصیه‌گر هوشمند) -->
+            <div class="card p-4 border-start border-5 border-emerald-500 flex-grow-1">
+                <h5 class="fw-bold text-emerald-800 d-flex align-items-center mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" class="me-2 text-emerald-600" viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+                    توصیه‌های بهبود و کارهای اصلاحی شخصی‌سازی‌شده
+                </h5>
+                <p class="text-muted small">جهت کاهش شانس افت تحصیلی، والدین و مربیان تحصیلی ملزم به هدایت دانش‌آموز بر اساس پروتکل زیر هستند:</p>
+                <ul class="list-group list-group-horizontal-md flex-wrap gap-2 mt-2">
+                    {% for rec in recommendations %}
+                    <li class="list-group-item border rounded bg-emerald-50-custom p-3 w-100 d-flex align-items-start gap-2 mb-2">
+                        <div class="bg-emerald-100-custom text-emerald-800 p-2 rounded-circle d-flex align-items-center justify-content-center me-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
+                        </div>
+                        <div class="fw-medium font-bold text-slate-700 leading-relaxed">{{ rec }}</div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
