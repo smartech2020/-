@@ -335,7 +335,7 @@ def dashboard():
         legend_title_text='سطوح ریسک',
         title={'text': "توزیع سطوح ریسک تحصیلی نهایی", 'x': 0.5, 'xanchor': 'center'}
     )
-    chart_pie = plotly.offline.plot(fig1, include_ipython_bool=False, output_type='div')
+    chart_pie = plotly.offline.plot(fig1, include_plotlyjs=False, output_type='div')
     
     # Plotly Chart 2: Grade vs Risk (Stacked Bar Chart)
     g_col = 'grade' if 'grade' in df.columns else 'پایه_تحصیلی'
@@ -358,7 +358,7 @@ def dashboard():
         plot_bgcolor='rgba(0,0,0,0)',
         title={'text': "ریسک تحصیلی تفکیک‌شده بر اساس مقطع تحصیلی", 'x': 0.5, 'xanchor': 'center'}
     )
-    chart_bar = plotly.offline.plot(fig2, include_ipython_bool=False, output_type='div')
+    chart_bar = plotly.offline.plot(fig2, include_plotlyjs=False, output_type='div')
     
     # Plotly Chart 3: Study Hours vs GPA
     gpa_field = 'gpa' if 'gpa' in df.columns else 'معدل_قبلی'
@@ -377,7 +377,7 @@ def dashboard():
         plot_bgcolor='rgba(0,0,0,0)',
         title={'text': "رابطه ساعات مطالعه و نمرات (تفکیک به ریسک)", 'x': 0.5, 'xanchor': 'center'}
     )
-    chart_scatter = plotly.offline.plot(fig3, include_ipython_bool=False, output_type='div')
+    chart_scatter = plotly.offline.plot(fig3, include_plotlyjs=False, output_type='div')
     
     return render_template(
         'dashboard.html', 
@@ -436,7 +436,7 @@ def statistics():
         plot_bgcolor='rgba(0,0,0,0)',
         title={'text': "میزان تأثیرگذاری هر فاکتور در تصمیم نهایی هوش مصنوعی", 'x': 0.5, 'xanchor': 'center'}
     )
-    chart_importance = plotly.offline.plot(fig_imp, include_ipython_bool=False, output_type='div')
+    chart_importance = plotly.offline.plot(fig_imp, include_plotlyjs=False, output_type='div')
     
     # Chart 2: Model Comparison Chart
     names = list(results.keys())
@@ -454,7 +454,7 @@ def statistics():
         plot_bgcolor='rgba(0,0,0,0)',
         title={'text': "مقایسه عملکرد الگوریتم‌های هوش مصنوعی مختلف", 'x': 0.5, 'xanchor': 'center'}
     )
-    chart_comparison = plotly.offline.plot(fig_comp, include_ipython_bool=False, output_type='div')
+    chart_comparison = plotly.offline.plot(fig_comp, include_plotlyjs=False, output_type='div')
 
     return render_template(
         'statistics.html', 
